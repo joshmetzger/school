@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\User;
 use Auth;
+use Illuminate\Support\Facades\Hash;
 
 class ProfileController extends Controller
 {
@@ -24,7 +25,7 @@ class ProfileController extends Controller
         return view('backend.user.edit_profile', compact('editData'));
     }
 
-    // REMEMBER WHEN USING POST METHOD, TO ADD TH REQUEST VALUES AS FUNCTION ARGUMENTS
+    // REMEMBER WHEN USING POST METHOD, TO ADD THE REQUEST VALUES AS FUNCTION ARGUMENTS
     public function ProfileStore(Request $request){
         $data = User::find(Auth::user()->id);
 
@@ -51,5 +52,29 @@ class ProfileController extends Controller
         );
 
         return redirect()->route('profile.view')->with($notification);
+    }
+
+    public function PasswordView(){
+        return view('backend.user.edit_password');
+    }
+
+    public function PasswordUpdate(Request $request){
+        $validatedData = $request->validate([
+            'oldpassword'=> 'required',
+            'password'=> 'required|confirmed',
+        ]);
+
+        $hashedPassword = Auth::user()->password;
+        if(Hash::check($request->oldpassword,$hashedPassword)){
+            $user = User::find(Auth::id());
+            $user->password = Hash::make($request->password);
+            $user->save();
+            Auth::logout();
+            return redirect()->route('login');
+        } else {
+            return redirect()->back();
+        }
+
+
     }
 }
