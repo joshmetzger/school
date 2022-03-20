@@ -71,4 +71,6 @@ class StudentClassController extends Controller
 
         return redirect()->route('student.class.view')->with($notification);
     }
+
+    
 }
