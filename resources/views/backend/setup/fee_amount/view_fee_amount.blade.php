@@ -36,11 +36,11 @@
                           <tr>
                               <td>{{ $key+1 }}</td>
          
-                              <td>{{ $amount->fee_category_id }}</td>
+                              <td>{{ $amount['fee_category']['name'] }}</td>
     
                               <td>
-                                  <a href="{{ route('fee.amount.edit', $amount->id) }}" class="btn btn-info">Edit</a>
-                                  <a href="{{ route('fee.amount.delete', $amount->id) }}" class="btn btn-danger" id="delete">Delete</a>
+                                  <a href="{{ route('fee.amount.edit', $amount->fee_category_id) }}" class="btn btn-info">Edit</a>
+                                  <a href="" class="btn btn-danger" id="delete">Delete</a>
                               </td>
                               
                           </tr>

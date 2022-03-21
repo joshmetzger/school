@@ -13,7 +13,9 @@ class FeeAmountController extends Controller
     //
     public function ViewFeeAmount(){
 
-        $data['allData'] = FeeCategoryAmount::all();
+        // $data['allData'] = FeeCategoryAmount::all();
+        $data['allData'] = FeeCategoryAmount::select('fee_category_id')
+            ->groupBy('fee_category_id')->get();
         return view('backend.setup.fee_amount.view_fee_amount', $data);
     }
 
@@ -45,5 +47,14 @@ class FeeAmountController extends Controller
 
         return redirect()->route('fee.amount.view')->with($notification);
 
+    }
+
+    public function EditFeeAmount($fee_category_id){
+        $data['editData'] = FeeCategoryAmount::where('fee_category_id', $fee_category_id)
+        ->orderBy('class_id', 'asc')->get();
+
+        $data['fee_categories'] = FeeCategory::all();
+        $data['classes'] = StudentClass::all();
+        return view('backend.setup.fee_amount.edit_fee_amount', $data);
     }
 }
